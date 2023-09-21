@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "serve": "node dist/index.ts",
+    "serve": "node dist/index.js",
     "dev": "esrun --watch src/index.ts"
   },
   "devDependencies": {

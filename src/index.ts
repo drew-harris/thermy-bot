@@ -28,7 +28,7 @@ client.on(Events.MessageCreate, (message) => {
   if (
     message.content === "!help" ||
     message.content === "/help" ||
-    message.content === "/help" ||
+    message.content === "\\/help" ||
     message.content ===
       "https://cdn.discordapp.com/attachments/1144492655020097627/1144683976502558750/lvMMdcpe.gif" ||
     getRandomInt(100) == 0

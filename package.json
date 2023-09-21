@@ -1,12 +1,19 @@
 {
-  "name": "team-bot",
+  "name": "thermy-bot",
   "version": "1.0.0",
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "serve": "node dist/index.ts",
+    "dev": "esrun --watch src/index.ts"
   },
   "devDependencies": {
+    "@digitak/esrun": "^3.2.24",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1"
   }
 }

@@ -15,6 +15,8 @@ client.once(Events.ClientReady, (c) => {
 });
 
 client.on(Events.MessageCreate, (message) => {
+  if (message.author.id === client.user?.id) return; // Prevent infinite loops
+
   if (message.content === "test1123") {
     message.reply("tost1123");
   }

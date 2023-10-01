@@ -22,10 +22,10 @@ const respond = async (prompt: string): Promise<string> => {
   const script = await getScript();
 
   const payload = {
-    model: "accounts/fireworks/models/llama-v2-7b-chat",
+    model: "accounts/fireworks/models/llama-v2-70b-chat",
     n: 1,
     max_tokens: 300,
-    temperature: 0.5,
+    temperature: 0.3,
     top_p: 0.9,
     messages: [
       {

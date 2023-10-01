@@ -1,12 +1,25 @@
 import { Message } from "discord.js";
 import { getRandomInt } from "./utils";
 import { client } from ".";
+import { respond } from "./ai";
 
 export default async function handleMessage(message: Message<boolean>) {
   if (message.author.id === client.user?.id) return; // Prevent infinite loops
 
   if (message.content === "test1123") {
     message.reply("tost1123");
+  }
+
+  // Thermy ai
+  if (
+    message.content.startsWith("Thermy,") ||
+    message.content.startsWith("thermy,") ||
+    message.content.startsWith("hey thermy") ||
+    message.content.startsWith("hey Thermy")
+  ) {
+    const prompt = message.content;
+    const response = await respond(prompt);
+    message.reply(response);
   }
 
   if (

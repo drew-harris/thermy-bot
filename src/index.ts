@@ -1,6 +1,7 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import "dotenv/config"; // Load environment variables
 import handleMessage from "./handleMessage";
+import { startServer } from "./fastify";
 console.log(process.env.TOKEN);
 
 const client = new Client({
@@ -27,5 +28,6 @@ if (!token) {
 }
 
 client.login(token);
+startServer();
 
 export { client };

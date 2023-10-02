@@ -34,7 +34,10 @@ export default async function handleMessage(message: Message<boolean>) {
   }
 
   //if the message contains the word "art"
-  if (message.content.toLowerCase().startsWith("thermy") && message.content.toLowerCase().includes("artwork")) {
+  if (
+    message.content.toLowerCase().startsWith("thermy") &&
+    message.content.toLowerCase().includes("artwork")
+  ) {
     message.channel.send("/waifu type:SFW tag:waifu");
   }
 }

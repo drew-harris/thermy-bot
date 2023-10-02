@@ -34,7 +34,7 @@ export default async function handleMessage(message: Message<boolean>) {
   }
 
   //if the message contains the word "art"
-  if (message.content.ToLower().startsWith("thermy") && message.content.toLowerCase().includes("artwork")) {
+  if (message.content.toLower().startsWith("thermy") && message.content.toLowerCase().includes("artwork")) {
     message.reply("/waifu type:SFW tag:waifu");
   }
 }

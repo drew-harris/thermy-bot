@@ -34,11 +34,6 @@ export default async function handleMessage(message: Message<boolean>) {
   }
 
   //if the message contains the word "art"
-  if () {
-    message.reply(
-      "https://cdn.discordapp.com/attachments/1144492655020097627/1144683976502558750/lvMMdcpe.gif"
-    );
-  }
   if (message.content.ToLower().startsWith("thermy") && message.content.toLowerCase().includes("artwork")) {
     message.reply("/waifu type:SFW tag:waifu");
   }

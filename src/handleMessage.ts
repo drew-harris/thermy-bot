@@ -2,6 +2,7 @@ import { Message } from "discord.js";
 import { getRandomInt } from "./utils";
 import { client } from ".";
 import { respond } from "./ai";
+import { artwork } from "./artwork";
 
 export default async function handleMessage(message: Message<boolean>) {
   if (message.author.id === client.user?.id) return; // Prevent infinite loops
@@ -33,11 +34,10 @@ export default async function handleMessage(message: Message<boolean>) {
     );
   }
 
-  //if the message contains the word "art"
   if (
     message.content.toLowerCase().startsWith("thermy") &&
     message.content.toLowerCase().includes("artwork")
   ) {
-    message.channel.send("/waifu type:SFW tag:waifu");
+    message.channel.send({ embeds: [artwork("https://cdn.waifu.im/7274.jpg")] });
   }
 }

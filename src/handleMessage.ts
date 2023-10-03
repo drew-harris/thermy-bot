@@ -3,6 +3,7 @@ import { getRandomInt } from "./utils";
 import { client } from ".";
 import { respond } from "./ai";
 import { artwork } from "./artwork";
+import { getArtwork } from "./compendium";
 
 export default async function handleMessage(message: Message<boolean>) {
   if (message.author.id === client.user?.id) return; // Prevent infinite loops
@@ -38,6 +39,9 @@ export default async function handleMessage(message: Message<boolean>) {
     message.content.toLowerCase().startsWith("thermy") &&
     message.content.toLowerCase().includes("artwork")
   ) {
-    message.channel.send({ embeds: [artwork("https://cdn.waifu.im/7274.jpg")] });
+    if (message.content.toLowerCase().includes("really fine") || message.content.toLowerCase().includes("very fine")) {
+      return message.channel.send({ embeds: [artwork(getArtwork(5))] });
+    }
+    message.channel.send({ embeds: [artwork(getArtwork(0))] });
   }
 }

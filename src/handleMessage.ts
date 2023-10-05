@@ -14,10 +14,10 @@ export default async function handleMessage(message: Message<boolean>) {
 
   // Thermy ai
   if (
-    message.content.startsWith("Thermy,") ||
-    message.content.startsWith("thermy,") ||
-    message.content.startsWith("hey thermy") ||
-    message.content.startsWith("hey Thermy")
+    message.content.toLowerCase().startsWith("Thermy,") ||
+    message.content.toLowerCase().startsWith("thermy,") ||
+    message.content.toLowerCase().startsWith("hey thermy") ||
+    message.content.toLowerCase().startsWith("hey Thermy")
   ) {
     const prompt = message.content;
     const response = await respond(prompt);

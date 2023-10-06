@@ -2,6 +2,7 @@ import { Client, Events, GatewayIntentBits } from "discord.js";
 import "dotenv/config"; // Load environment variables
 import handleMessage from "./handleMessage";
 import { startServer } from "./fastify";
+import { handleCommand } from "./command/handler";
 console.log(process.env.TOKEN);
 
 const client = new Client({
@@ -18,6 +19,13 @@ client.once(Events.ClientReady, (c) => {
 
 client.on(Events.MessageCreate, (message) => {
   handleMessage(message);
+});
+
+client.on(Events.InteractionCreate, (interaction) => {
+  if (!interaction.isCommand()) return;
+  if (interaction.isChatInputCommand()) {
+    handleCommand(interaction);
+  }
 });
 
 const token = process.env.TOKEN;

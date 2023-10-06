@@ -8,7 +8,8 @@
     "serve": "node dist/index.js",
     "dev": "esrun --watch src/index.ts",
     "db-push": "npx drizzle-kit push:mysql",
-    "migrate": "drizzle-kit generate:mysql --schema src/db/schema.ts && ts-node src/db/migrate.ts"
+    "migrate": "drizzle-kit generate:mysql --schema src/db/schema.ts && ts-node src/db/migrate.ts",
+    "push-commands": "esrun src/command/push.ts"
   },
   "devDependencies": {
     "@digitak/esrun": "^3.2.24",

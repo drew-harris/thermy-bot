@@ -10,12 +10,12 @@ type SlashOptionsOnlyCommand = Omit<
   "addSubcommand" | "addSubcommandGroup"
 >;
 
-const schema = z.object({});
-
 type Options = {
   description: string;
   type: ZodType;
 };
+
+type OptionsList = Record<string, Options>;
 
 type Command<T extends ZodType | undefined> = {
   handle: (
@@ -68,3 +68,21 @@ createCommand(
     },
   },
 );
+
+type FlattenType<T> = T extends Record<string, Options> ? {
+    [K in keyof T]: T[K]["type"] extends z.Schema<infer U> ? U : never;
+  }
+  : T;
+
+const input: OptionsList = {
+  name: {
+    description: "your name",
+    type: z.string(),
+  },
+  age: {
+    description: "your age",
+    type: z.number(),
+  },
+};
+
+type FlattenedInput = FlattenType<typeof input>;

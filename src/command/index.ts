@@ -53,37 +53,39 @@ export const createCommand = <
       if (
         type instanceof z.ZodString
       ) {
-        console.log("Adding string option");
         command.addStringOption((o) => {
-          console.log(`adding string option: ${value.name} key:${key}`);
           o = o.setName(value.name || key).setDescription(value.description)
             .setRequired(!type.isOptional());
           // Add minlength
           type._def.checks.forEach((c) => {
-            console.log("kind: ", c.kind);
             if (c.kind === "min") {
-              console.log("adding min length", c.value);
               if (c.value != 1) {
                 o = o.setMinLength(c.value);
               } else {
                 o = o.setRequired(true);
               }
+            } else if (c.kind === "max") {
+              o = o.setMaxLength(c.value);
             }
           });
 
           return o;
         });
       } else if (type instanceof z.ZodNumber) {
-        console.log("Adding number option");
         command.addNumberOption((o) => {
-          console.log(`adding string option: ${value.name} key:${key}`);
           o = o.setName(value.name || key).setDescription(value.description)
             .setRequired(!type.isOptional());
+          type._def.checks.forEach((c) => {
+            if (c.kind === "min") {
+              o = o.setMinValue(c.value);
+            } else if (c.kind === "max") {
+              o = o.setMaxValue(c.value);
+            }
+          });
           return o;
         });
       } else if (type instanceof z.ZodEnum) {
         command.addStringOption((o) => {
-          console.log(`adding string option: ${value.name} key:${key}`);
           o = o.setName(value.name || key).setDescription(value.description)
             .setRequired(!type.isOptional());
           o = o.addChoices(
@@ -95,7 +97,6 @@ export const createCommand = <
         });
       } else if (type instanceof z.ZodBoolean) {
         command.addBooleanOption((o) => {
-          console.log(`adding string option: ${value.name} key:${key}`);
           o = o.setName(value.name || key).setDescription(value.description)
             .setRequired(!type.isOptional());
           return o;

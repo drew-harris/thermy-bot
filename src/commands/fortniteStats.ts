@@ -23,11 +23,14 @@ export const fortniteStatsCmd = createCommand(
         name: i.input.name,
         image: "all",
       });
+      if (!process.env.FORTNITE_KEY) {
+        throw new Error("Could not get fortnite api key");
+      }
       const response = await fetch(
         "https://fortnite-api.com/v2/stats/br/v2?" + params.toString(),
         {
           headers: {
-            Authorization: "NOOOOO",
+            Authorization: process.env.FORTNITE_KEY,
           },
         }
       );

@@ -7,14 +7,19 @@ export const testCommand = createCommand(
     description: "simple test command",
     options: {
       name: {
-        name: "name",
         description: "A test description",
-        type: z.string(),
+        type: z.string().min(5),
+      },
+      platform: {
+        description: "Your game platform",
+        type: z.enum(["ps4", "pc"]),
       },
     },
   },
   (inter) => {
     console.log("input: ", inter.input);
-    inter.reply(`Hello ${inter.input.name}!`);
+    inter.reply(
+      `Hello ${inter.input.name}! your platform: ${inter.input.platform}`
+    );
   }
 );

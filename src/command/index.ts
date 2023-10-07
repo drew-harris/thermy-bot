@@ -14,7 +14,7 @@ type Options = {
 
 type OptionsList = Record<string, Options>;
 
-type Command<T> = {
+type OptionCommand<T> = {
   handle: (
     interaction: ChatInputCommandInteraction & {
       input: T;
@@ -30,38 +30,88 @@ type FlattenType<T> = T extends Record<string, Options> ? {
   }
   : undefined;
 
-type CommandConfig<T extends OptionsList> = {
+type CommandConfig<T extends OptionsList | undefined> = {
   options?: T;
   name: string;
   description: string;
+  inDMS?: boolean;
 };
 
-export const createCommand = <T extends OptionsList, F extends FlattenType<T>>(
+export const createCommand = <
+  T extends OptionsList | undefined,
+  F extends FlattenType<T>,
+>(
   config: CommandConfig<T>,
-  handler: Command<FlattenType<T>>["handle"],
+  handler: OptionCommand<FlattenType<T>>["handle"],
 ) => {
-  const command = new SlashCommandBuilder().setDescription(config.description)
-    .setName(config.name);
+  let command = new SlashCommandBuilder().setDescription(config.description)
+    .setName(config.name).setDMPermission(config.inDMS);
 
   if (config.options) {
     for (const [key, value] of Object.entries(config.options)) {
-      // If it is a string
+      const type = value.type;
       if (
-        value.type instanceof z.ZodString || value.type instanceof z.ZodEnum
+        type instanceof z.ZodString
       ) {
         console.log("Adding string option");
         command.addStringOption((o) => {
           console.log(`adding string option: ${value.name} key:${key}`);
-          o = o.setName(value.name || key);
-          o = o.setDescription(value.description);
-          if (value.type.isOptional()) {
-            o = o.setRequired(false);
-          }
+          o = o.setName(value.name || key).setDescription(value.description)
+            .setRequired(!type.isOptional());
+          // Add minlength
+          type._def.checks.forEach((c) => {
+            console.log("kind: ", c.kind);
+            if (c.kind === "min") {
+              console.log("adding min length", c.value);
+              if (c.value != 1) {
+                o = o.setMinLength(c.value);
+              } else {
+                o = o.setRequired(true);
+              }
+            }
+          });
+
           return o;
         });
+      } else if (type instanceof z.ZodNumber) {
+        console.log("Adding number option");
+        command.addNumberOption((o) => {
+          console.log(`adding string option: ${value.name} key:${key}`);
+          o = o.setName(value.name || key).setDescription(value.description)
+            .setRequired(!type.isOptional());
+          return o;
+        });
+      } else if (type instanceof z.ZodEnum) {
+        command.addStringOption((o) => {
+          console.log(`adding string option: ${value.name} key:${key}`);
+          o = o.setName(value.name || key).setDescription(value.description)
+            .setRequired(!type.isOptional());
+          o = o.addChoices(
+            ...type._def.values.map((v: string) => {
+              return { name: v, value: v };
+            }),
+          );
+          return o;
+        });
+      } else if (type instanceof z.ZodBoolean) {
+        command.addBooleanOption((o) => {
+          console.log(`adding string option: ${value.name} key:${key}`);
+          o = o.setName(value.name || key).setDescription(value.description)
+            .setRequired(!type.isOptional());
+          return o;
+        });
+      } else {
+        throw new Error("You used a zod type that hasn't been created yet");
       }
     }
   }
+  // } else if (config.subCommands) {
+  //   for (const subCommand of config.subCommands) {
+  //     command.addSubcommand(
+  //       subCommand.command as unknown as SlashCommandSubcommandBuilder,
+  //     );
+  //   }
+  // }
 
   // Create the schema
   let schema;
@@ -83,5 +133,6 @@ export const createCommand = <T extends OptionsList, F extends FlattenType<T>>(
     schema,
     command: command,
     name: config.name,
-  } satisfies Command<F>;
+    // subCommands: config.subCommands,
+  } satisfies OptionCommand<F>;
 };

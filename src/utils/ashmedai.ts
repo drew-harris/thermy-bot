@@ -23,11 +23,15 @@ export const ashDelete = async (
         } else {
           safeMessages++;
         }
-        if (safeMessages > max) break;
+        if (safeMessages > max + 1) break;
       }
 
       if (removedMessages > 0) {
-        interaction.reply("Cleared " + removedMessages + " messages");
+        interaction.reply(
+          "Cleared " +
+            removedMessages +
+            (removedMessages == 1 ? " message" : " messages")
+        );
       } else {
         interaction.reply("Found nothing sus");
       }

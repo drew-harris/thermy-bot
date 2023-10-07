@@ -4,6 +4,7 @@ import { client } from ".";
 import { respond } from "./ai";
 import { artwork } from "./artwork";
 import { getArtwork } from "./compendium";
+import { ashDelete } from "./utils/ashmedai";
 
 export default async function handleMessage(message: Message<boolean>) {
   if (message.author.id === client.user?.id) return; // Prevent infinite loops
@@ -52,31 +53,6 @@ export default async function handleMessage(message: Message<boolean>) {
     message.content.toLowerCase().startsWith("ashmedai") &&
     message.content.toLowerCase().includes("clear")
   ) {
-    const result = await message.channel.messages
-      .fetch({ limit: 100 })
-      .then((messages) => {
-        let safeMessages = 0;
-        let removedMessages = 0;
-
-        for (const mes of messages) {
-          const m = mes[1];
-          if (
-            m.content.includes("cdn.waifu.im") ||
-            m.embeds.some((e) => e.image?.url?.includes("cdn.waifu.im"))
-          ) {
-            m.delete();
-            removedMessages++;
-          } else {
-            safeMessages++;
-          }
-          if (safeMessages > 15) break;
-        }
-
-        if (removedMessages > 0) {
-          message.reply("Cleared " + removedMessages + " messages");
-        } else {
-          message.reply("Found nothing sus");
-        }
-      });
+    ashDelete(message);
   }
 }

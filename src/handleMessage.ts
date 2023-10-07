@@ -39,9 +39,44 @@ export default async function handleMessage(message: Message<boolean>) {
     message.content.toLowerCase().startsWith("thermy") &&
     message.content.toLowerCase().includes("artwork")
   ) {
-    if (message.content.toLowerCase().includes("really fine") || message.content.toLowerCase().includes("very fine")) {
+    if (
+      message.content.toLowerCase().includes("really fine") ||
+      message.content.toLowerCase().includes("very fine")
+    ) {
       return message.channel.send({ embeds: [artwork(getArtwork(5))] });
     }
     message.channel.send({ embeds: [artwork(getArtwork(0))] });
+  }
+
+  if (
+    message.content.toLowerCase().startsWith("ashmedai") &&
+    message.content.toLowerCase().includes("clear")
+  ) {
+    const result = await message.channel.messages
+      .fetch({ limit: 100 })
+      .then((messages) => {
+        let safeMessages = 0;
+        let removedMessages = 0;
+
+        for (const mes of messages) {
+          const m = mes[1];
+          if (
+            m.content.includes("cdn.waifu.im") ||
+            m.embeds.some((e) => e.image?.url?.includes("cdn.waifu.im"))
+          ) {
+            m.delete();
+            removedMessages++;
+          } else {
+            safeMessages++;
+          }
+          if (safeMessages > 15) break;
+        }
+
+        if (removedMessages > 0) {
+          message.reply("Cleared " + removedMessages + " messages");
+        } else {
+          message.reply("Found nothing sus");
+        }
+      });
   }
 }

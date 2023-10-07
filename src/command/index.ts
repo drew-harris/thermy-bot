@@ -13,6 +13,8 @@ type Options = {
 
 type OptionsList = Record<string, Options>;
 
+export type Command<T> = OptionCommand<T>;
+
 type OptionCommand<T> = {
   handle: (
     interaction: ChatInputCommandInteraction & {

@@ -38,7 +38,6 @@ type CommandConfig<T extends OptionsList | undefined> = {
 
 export const createCommand = <
   T extends OptionsList | undefined,
-  F extends FlattenType<T>,
 >(
   config: CommandConfig<T>,
   handler: OptionCommand<FlattenType<T>>["handle"],
@@ -134,5 +133,5 @@ export const createCommand = <
     command: command,
     name: config.name,
     // subCommands: config.subCommands,
-  } satisfies OptionCommand<F>;
+  } satisfies OptionCommand<FlattenType<T>>;
 };

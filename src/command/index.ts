@@ -49,7 +49,7 @@ export const createCommand = <
 
   if (config.options) {
     for (const [key, value] of Object.entries(config.options)) {
-      const optional = value.type.isOptional();
+      const isRequired = !value.type.isOptional();
       const type = value.type instanceof z.ZodOptional
         ? value.type._def.innerType
         : value.type;
@@ -58,14 +58,14 @@ export const createCommand = <
       ) {
         command.addStringOption((o) => {
           o = o.setName(key).setDescription(value.description)
-            .setRequired(!type.isOptional());
+            .setRequired(isRequired);
           // Add minlength
           type._def.checks.forEach((c) => {
             if (c.kind === "min") {
               if (c.value != 1) {
                 o = o.setMinLength(c.value);
               } else {
-                o = o.setRequired(true);
+                o = o.setRequired(isRequired);
               }
             } else if (c.kind === "max") {
               o = o.setMaxLength(c.value);
@@ -77,7 +77,7 @@ export const createCommand = <
       } else if (type instanceof z.ZodNumber) {
         command.addNumberOption((o) => {
           o = o.setName(key).setDescription(value.description)
-            .setRequired(!type.isOptional());
+            .setRequired(isRequired);
           type._def.checks.forEach((c) => {
             if (c.kind === "min") {
               o = o.setMinValue(c.value);
@@ -90,7 +90,7 @@ export const createCommand = <
       } else if (type instanceof z.ZodEnum) {
         command.addStringOption((o) => {
           o = o.setName(key).setDescription(value.description)
-            .setRequired(!type.isOptional());
+            .setRequired(isRequired);
           o = o.addChoices(
             ...type._def.values.map((v: string) => {
               return { name: v, value: v };
@@ -101,7 +101,7 @@ export const createCommand = <
       } else if (type instanceof z.ZodBoolean) {
         command.addBooleanOption((o) => {
           o = o.setName(key).setDescription(value.description)
-            .setRequired(!type.isOptional());
+            .setRequired(isRequired);
           return o;
         });
       } else {

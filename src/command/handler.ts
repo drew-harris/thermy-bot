@@ -14,31 +14,33 @@ export const handleCommand = async (
     return;
   }
 
-  const data = interaction.options.data.reduce((acc, cur) => {
-    acc[cur.name] = cur.value;
-    return acc;
-  }, {} as any);
+  if (matchingCommand.type === "option") {
+    const data = interaction.options.data.reduce((acc, cur) => {
+      acc[cur.name] = cur.value;
+      return acc;
+    }, {} as any);
 
-  const parseResult = matchingCommand.schema.safeParse(data);
+    const parseResult = matchingCommand.schema.safeParse(data);
 
-  if (!parseResult.success) {
-    if (parseResult.error instanceof ZodError) {
-      interaction.reply(
-        `For Field: ${parseResult.error.issues[0].path[0]}, ${parseResult.error.issues[0].message}`
-      );
+    if (!parseResult.success) {
+      if (parseResult.error instanceof ZodError) {
+        interaction.reply(
+          `For Field: ${parseResult.error.issues[0].path[0]}, ${parseResult.error.issues[0].message}`
+        );
+      }
+      return;
     }
-    return;
-  }
-  let fullInteraction = Object.assign(interaction, {
-    input: parseResult.data,
-  });
+    let fullInteraction = Object.assign(interaction, {
+      input: parseResult.data,
+    });
 
-  // Run the command
-  try {
-    // TODO: Fix constituent type error
-    await matchingCommand.handle(fullInteraction as any);
-  } catch (error) {
-    console.error(error);
-    interaction.reply("There was an error while executing this command!");
+    // Run the command
+    try {
+      // TODO: Fix constituent type error
+      await matchingCommand.handle(fullInteraction as any);
+    } catch (error) {
+      console.error(error);
+      interaction.reply("There was an error while executing this command!");
+    }
   }
 };

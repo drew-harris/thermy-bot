@@ -13,9 +13,9 @@ type Options = {
 
 type OptionsList = Record<string, Options>;
 
-export type Command<T> = OptionCommand<T>;
+export type Command<T> = OptionCommand<T> | CommandGroup;
 
-type OptionCommand<T> = {
+export type OptionCommand<T> = {
   handle: (
     interaction: ChatInputCommandInteraction & {
       input: T;
@@ -23,6 +23,12 @@ type OptionCommand<T> = {
   ) => Promise<void> | void;
   command: SlashOptionsOnlyCommand;
   schema: ZodSchema;
+  name: string;
+  type: "option";
+};
+
+type CommandGroup = {
+  type: "group";
   name: string;
 };
 
@@ -137,6 +143,7 @@ export const createCommand = <
     schema,
     command: command,
     name: config.name,
+    type: "option",
     // subCommands: config.subCommands,
   } satisfies OptionCommand<FlattenType<T>>;
 };

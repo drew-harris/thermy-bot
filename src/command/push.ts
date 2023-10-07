@@ -1,9 +1,11 @@
-import { Command } from ".";
+import { Command, OptionCommand } from ".";
 import { commandsList } from "./list";
 import "dotenv/config"; // Load environment variables
 
 export const pushCommands = async () => {
-  const allCommands = commandsList.map((c) => c.command.toJSON());
+  const allCommands = commandsList
+    .filter((c) => c.type === "option")
+    .map((c) => c.command.toJSON());
   console.log("ALL COMMANDS: ", allCommands);
 
   const rest = await import("@discordjs/rest");
@@ -38,7 +40,7 @@ export const pushCommands = async () => {
   }
 };
 
-export const addCommandToServer = async <T>(command: Command<T>) => {
+export const addCommandToServer = async <T>(command: OptionCommand<T>) => {
   const commandJSON = command.command.toJSON();
   console.log("COMMAND JSON: ", commandJSON);
 

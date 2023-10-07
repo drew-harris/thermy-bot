@@ -7,7 +7,6 @@ type SlashOptionsOnlyCommand = Omit<
 >;
 
 type Options = {
-  name?: string;
   description: string;
   type: ZodType;
 };
@@ -54,7 +53,7 @@ export const createCommand = <
         type instanceof z.ZodString
       ) {
         command.addStringOption((o) => {
-          o = o.setName(value.name || key).setDescription(value.description)
+          o = o.setName(key).setDescription(value.description)
             .setRequired(!type.isOptional());
           // Add minlength
           type._def.checks.forEach((c) => {
@@ -73,7 +72,7 @@ export const createCommand = <
         });
       } else if (type instanceof z.ZodNumber) {
         command.addNumberOption((o) => {
-          o = o.setName(value.name || key).setDescription(value.description)
+          o = o.setName(key).setDescription(value.description)
             .setRequired(!type.isOptional());
           type._def.checks.forEach((c) => {
             if (c.kind === "min") {
@@ -86,7 +85,7 @@ export const createCommand = <
         });
       } else if (type instanceof z.ZodEnum) {
         command.addStringOption((o) => {
-          o = o.setName(value.name || key).setDescription(value.description)
+          o = o.setName(key).setDescription(value.description)
             .setRequired(!type.isOptional());
           o = o.addChoices(
             ...type._def.values.map((v: string) => {
@@ -97,7 +96,7 @@ export const createCommand = <
         });
       } else if (type instanceof z.ZodBoolean) {
         command.addBooleanOption((o) => {
-          o = o.setName(value.name || key).setDescription(value.description)
+          o = o.setName(key).setDescription(value.description)
             .setRequired(!type.isOptional());
           return o;
         });

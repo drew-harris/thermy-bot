@@ -35,7 +35,8 @@ export const handleCommand = async (
 
   // Run the command
   try {
-    await matchingCommand.handle(fullInteraction);
+    // TODO: Fix constituent type error
+    await matchingCommand.handle(fullInteraction as any);
   } catch (error) {
     console.error(error);
     interaction.reply("There was an error while executing this command!");

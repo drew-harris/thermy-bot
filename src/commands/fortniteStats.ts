@@ -40,7 +40,7 @@ export const fortniteStatsCmd = createCommand(
         console.log("DATA: ", data);
         i.reply(data.data.image || "Could not get stats");
       } else {
-        i.reply(await response.text());
+        i.reply("Couldn't get stats");
       }
     } catch (err) {
       throw new Error("Could not get stats");

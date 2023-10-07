@@ -50,6 +50,7 @@ export const createCommand = <
   if (config.options) {
     for (const [key, value] of Object.entries(config.options)) {
       const type = value.type;
+      console.log("TYPE: ", type);
       if (
         type instanceof z.ZodString
       ) {
@@ -71,6 +72,22 @@ export const createCommand = <
 
           return o;
         });
+      } else if (type instanceof z.ZodOptional) {
+        if (type._def.innerType instanceof z.ZodNumber) {
+          command.addNumberOption((o) => {
+            o = o.setName(key).setDescription(value.description)
+              .setRequired(!type.isOptional());
+            type._def.innerType._def.checks.forEach((c: any) => {
+              if (c.kind === "min") {
+                o = o.setMinValue(c.value);
+              } else if (c.kind === "max") {
+                o = o.setMaxValue(c.value);
+              }
+            });
+
+            return o;
+          });
+        }
       } else if (type instanceof z.ZodNumber) {
         command.addNumberOption((o) => {
           o = o.setName(key).setDescription(value.description)

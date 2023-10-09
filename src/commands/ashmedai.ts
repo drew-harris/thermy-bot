@@ -1,6 +1,6 @@
 import z from "zod";
-import { createCommand } from "../command";
 import { ashDelete } from "../utils/ashmedai";
+import { createCommand } from "../command/createCommand";
 
 export const ashmedaiCmd = createCommand(
   {

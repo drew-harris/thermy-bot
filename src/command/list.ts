@@ -2,13 +2,14 @@ import { Command, OptionCommand } from ".";
 import { addCommandCommand } from "../commands/addCommandCommand";
 import { ashmedaiCmd } from "../commands/ashmedai";
 import { fortniteStatsCmd } from "../commands/fortniteStats";
-import { testCommand } from "../commands/testCommand";
+import { testCommand, testGroup } from "../commands/testCommand";
 
-export const commandsList: OptionCommand<any>[] = [
+export const commandsList: Command<any>[] = [
   testCommand,
   fortniteStatsCmd,
   addCommandCommand,
   ashmedaiCmd,
+  testGroup,
 ];
 
 export const addCommand = <T>(command: OptionCommand<T>) => {

@@ -1,5 +1,6 @@
 import z from "zod";
-import { createCommand } from "../command";
+import { createCommand } from "../command/createCommand";
+import { createCommandGroup, createSubCommand } from "../command/commandGroup";
 
 export const testCommand = createCommand(
   {
@@ -23,3 +24,34 @@ export const testCommand = createCommand(
     );
   }
 );
+
+export const testGroup = createCommandGroup({
+  name: "testgroup",
+  description: "testgroup of commands",
+  subcommands: [
+    createSubCommand(
+      {
+        name: "hello",
+        description: "says hello",
+      },
+      (int) => {
+        int.reply("yo whats up");
+      }
+    ),
+    createSubCommand(
+      {
+        name: "goodbye",
+        description: "says goodbye",
+        options: {
+          name: {
+            type: z.string(),
+            description: "Your name",
+          },
+        },
+      },
+      (int) => {
+        int.reply(`goodbye ${int.input.name}`);
+      }
+    ),
+  ],
+});

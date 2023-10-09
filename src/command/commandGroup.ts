@@ -3,13 +3,19 @@ import {
   CommandGroup,
   CommandGroupConfig,
   FlattenType,
-  OptionCommand,
+  InnerHandle,
   OptionCommandConfig,
   OptionsList,
   SubCommand,
 } from ".";
-import { buildCommand, buildSchema } from "./buildCommand";
-import z from "zod";
+import {
+  buildCommand,
+  buildCommandGroupExecute,
+  buildModalExecute,
+  buildOptionExecute,
+  buildSchema,
+  buildSubcommandExecute,
+} from "./buildCommand";
 
 /**
  * Creates a command that accepts options
@@ -26,7 +32,10 @@ export const createCommandGroup = (
     groupCommand.addSubcommand(c.subcommand);
   });
 
+  const handle = buildCommandGroupExecute(config.subcommands);
+
   return {
+    handle: handle,
     subcommands: config.subcommands,
     command: groupCommand,
     type: "group",
@@ -38,34 +47,31 @@ export const createSubCommand = <
   O extends OptionsList | undefined,
 >(
   config: Omit<OptionCommandConfig<O>, "inDMS" | "type">,
-  handler: OptionCommand<FlattenType<O>>["handle"],
+  handler: InnerHandle<FlattenType<O>>,
 ): SubCommand<FlattenType<O>> => {
-  if (config.options) {
-    let command = new SlashCommandSubcommandBuilder().setDescription(
-      config.description,
-    )
-      .setName(config.name);
+  let command = new SlashCommandSubcommandBuilder().setDescription(
+    config.description,
+  )
+    .setName(config.name);
+  let schema = buildSchema(config.options);
+  if (!config.modal) {
     command = buildCommand(command, config.options);
-    let schema = buildSchema(config.options);
-    return {
-      handle: handler as OptionCommand<FlattenType<O>>["handle"],
-      schema,
-      subcommand: command,
-      name: config.name,
-      type: "subcommand",
-      // subCommands: config.subCommands,
-    } satisfies SubCommand<FlattenType<O>>;
-  } else {
-    let command = new SlashCommandSubcommandBuilder().setDescription(
-      config.description,
-    )
-      .setName(config.name);
-    return {
-      name: config.name,
-      type: "subcommand",
-      schema: z.any(),
-      handle: handler as OptionCommand<FlattenType<O>>["handle"],
-      subcommand: command,
-    };
   }
+  if (config.modal) {
+  }
+  let fullExecute: ReturnType<typeof buildOptionExecute>;
+  if (!config.modal || !config.options) {
+    fullExecute = buildOptionExecute(handler, schema);
+  } else {
+    fullExecute = buildModalExecute(config.options, handler, schema);
+  }
+  return {
+    handle: fullExecute,
+    modal: config.modal && !!config.options || false,
+    schema,
+    subcommand: command,
+    name: config.name,
+    type: "subcommand",
+    // subCommands: config.subCommands,
+  } satisfies SubCommand<FlattenType<O>>;
 };

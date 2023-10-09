@@ -1,6 +1,6 @@
-import { Command, OptionCommand } from ".";
-import { commandsList } from "./list";
 import "dotenv/config"; // Load environment variables
+import { OptionCommand } from ".";
+import { commandsList } from "./list";
 
 export const pushCommands = async () => {
   const allCommands = commandsList.map((c) => c.command.toJSON());

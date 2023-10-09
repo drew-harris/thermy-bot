@@ -4,6 +4,7 @@ import { createCommandGroup, createSubCommand } from "../command/commandGroup";
 
 export const testCommand = createCommand(
   {
+    modal: true,
     name: "test",
     description: "simple test command",
     options: {
@@ -19,9 +20,7 @@ export const testCommand = createCommand(
   },
   (inter) => {
     console.log("input: ", inter.input);
-    inter.reply(
-      `Hello ${inter.input.name}! your platform: ${inter.input.platform}`
-    );
+    inter.reply(`Hello ${inter.input.name}!`);
   }
 );
 
@@ -41,6 +40,7 @@ export const testGroup = createCommandGroup({
     createSubCommand(
       {
         name: "goodbye",
+        modal: true,
         description: "says goodbye",
         options: {
           name: {

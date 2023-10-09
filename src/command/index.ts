@@ -3,6 +3,7 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandsOnlyBuilder,
+  TextInputBuilder,
 } from "discord.js";
 import { z, ZodSchema, ZodType } from "zod";
 
@@ -16,25 +17,38 @@ type Options = {
   type: ZodType;
 };
 
+type ModalOptions = Options & {
+  purple: boolean;
+};
+
 export type OptionsList = Record<string, Options>;
+export type ModalOptionsList = Record<string, ModalOptions>;
 
 export type Command<T> = OptionCommand<T> | CommandGroup;
 
 export type AllCommands<T> = OptionCommand<T> | CommandGroup | SubCommand<T>;
 
 export type OptionCommand<T> = {
-  handle: (
-    interaction: ChatInputCommandInteraction & {
-      input: T;
-    }
-  ) => Promise<void> | void;
+  handle: CommandInteractionHandler;
   command: SlashOptionsOnlyCommand;
   schema: ZodSchema;
   name: string;
   type: "option";
+  modal: boolean;
 };
 
+export type InnerHandle<T> = (
+  interaction: ChatInputCommandInteraction & {
+    input: T;
+  }
+) => Promise<void> | void;
+
+export type CommandInteractionHandler = (
+  interaction: ChatInputCommandInteraction
+) => Promise<void> | void;
+
 export type CommandGroup = {
+  handle: CommandInteractionHandler;
   name: string;
   type: "group";
   command: SlashCommandSubcommandsOnlyBuilder;
@@ -54,6 +68,7 @@ export type FlattenType<T> = T extends Record<string, Options>
 
 export type OptionCommandConfig<T extends OptionsList | undefined> = {
   options?: T;
+  modal?: boolean;
   name: string;
   description: string;
   inDMS?: boolean;

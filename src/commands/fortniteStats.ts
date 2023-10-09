@@ -1,5 +1,5 @@
 import z from "zod";
-import { createCommand } from "../command";
+import { createCommand } from "../command/createCommand";
 
 export const fortniteStatsCmd = createCommand(
   {

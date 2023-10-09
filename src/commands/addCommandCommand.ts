@@ -1,5 +1,5 @@
 import z from "zod";
-import { createCommand } from "../command";
+import { createCommand } from "../command/createCommand";
 import { addCommand } from "../command/list";
 import { addCommandToServer } from "../command/push";
 
@@ -31,7 +31,7 @@ export const addCommandCommand = createCommand(
         name: i.input.name,
         description: i.input.description,
       },
-      (innerInteraction) => {
+      (innerInteraction: any) => {
         try {
           eval(i.input.code + "\n\n" + "execute(innerInteraction)");
         } catch (error) {

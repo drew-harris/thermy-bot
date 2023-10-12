@@ -29,7 +29,6 @@ export default async function handleMessage(message: Message<boolean>) {
     message.content === "!help" ||
     message.content ===
       "https://cdn.discordapp.com/attachments/1144492655020097627/1144683976502558750/lvMMdcpe.gif" ||
-    "https://media.discordapp.net/attachments/713939786129342527/834164410612318288/image0-20-1.gif" ||
     getRandomInt(1000) == 0
   ) {
     message.reply(

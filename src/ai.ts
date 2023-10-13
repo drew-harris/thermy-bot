@@ -54,7 +54,7 @@ const respond = async (prompt: string): Promise<string> => {
         if (data?.choices?.length > 0) {
             const message = data.choices[0].message.content;
             console.log("response: ", message);
-            message.replace(/:(\w_)+:/, "");
+            message.replace(/(:[\w]+:)/, "");
             return message;
         }
         return JSON.stringify(data);

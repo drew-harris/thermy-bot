@@ -13,8 +13,13 @@ fastify.get("/", function (request, reply) {
 });
 
 fastify.get("/scripts", async (req, res) => {
-  const scripts = await db.query.scripts.findMany().execute();
-  return scripts;
+  try {
+    const scripts = await db.query.scripts.findMany().execute();
+    return scripts;
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: error });
+  }
 });
 
 const newScriptSchema = z.object({

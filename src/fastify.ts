@@ -14,7 +14,7 @@ fastify.get("/", function (request, reply) {
 
 fastify.get("/scripts", async (req, res) => {
   try {
-    const scripts = await db.query.scripts.findMany().execute();
+    const scripts = await db.query.scripts.findMany({});
     return scripts;
   } catch (error) {
     console.error(error);

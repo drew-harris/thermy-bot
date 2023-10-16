@@ -9,7 +9,7 @@ export const pushCommands = async () => {
   const rest = await import("@discordjs/rest");
   const { Routes } = await import("discord-api-types/v9");
 
-  if (!process.env.TOKEN) {
+  if (!process.env.REAL_TOKEN) {
     console.error("No token provided!");
     process.exit(1);
   }
@@ -22,7 +22,7 @@ export const pushCommands = async () => {
   console.log("CLIENT ID: ", process.env.CLIENT_ID);
 
   const restClient = new rest.REST({ version: "9" }).setToken(
-    process.env.TOKEN
+    process.env.REAL_TOKEN
   );
 
   try {
@@ -45,7 +45,7 @@ export const addCommandToServer = async <T>(command: OptionCommand<T>) => {
   const rest = await import("@discordjs/rest");
   const { Routes } = await import("discord-api-types/v9");
 
-  if (!process.env.TOKEN) {
+  if (!process.env.REAL_TOKEN) {
     console.error("No token provided!");
     process.exit(1);
   }
@@ -56,7 +56,7 @@ export const addCommandToServer = async <T>(command: OptionCommand<T>) => {
   }
 
   const restClient = new rest.REST({ version: "9" }).setToken(
-    process.env.TOKEN
+    process.env.REAL_TOKEN
   );
 
   try {

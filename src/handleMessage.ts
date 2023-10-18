@@ -4,7 +4,6 @@ import { client } from ".";
 import { respond } from "./ai";
 import { artwork } from "./artwork";
 import { getArtwork } from "./compendium";
-import { ashDelete } from "./utils/ashmedai";
 
 export default async function handleMessage(message: Message<boolean>) {
   if (message.author.id === client.user?.id) return; // Prevent infinite loops
@@ -29,7 +28,8 @@ export default async function handleMessage(message: Message<boolean>) {
     message.content === "!help" ||
     message.content ===
       "https://cdn.discordapp.com/attachments/1144492655020097627/1144683976502558750/lvMMdcpe.gif" ||
-    message.content === "https://media.discordapp.net/attachments/713939786129342527/834164410612318288/image0-20-1.gif" ||
+    message.content ===
+      "https://media.discordapp.net/attachments/713939786129342527/834164410612318288/image0-20-1.gif" ||
     getRandomInt(1000) == 0
   ) {
     message.reply(
@@ -48,12 +48,5 @@ export default async function handleMessage(message: Message<boolean>) {
       return message.channel.send({ embeds: [artwork(getArtwork(5))] });
     }
     message.channel.send({ embeds: [artwork(getArtwork(0))] });
-  }
-
-  if (
-    message.content.toLowerCase().startsWith("ashmedai") &&
-    message.content.toLowerCase().includes("clear")
-  ) {
-    ashDelete(message);
   }
 }

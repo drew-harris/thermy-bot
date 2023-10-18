@@ -7,7 +7,6 @@ export const commandsList: Command<any>[] = [
   testCommand,
   fortniteStatsCmd,
   addCommandCommand,
-  // ashmedaiCmd,
   testGroup,
 ];
 

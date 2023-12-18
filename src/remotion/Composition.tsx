@@ -1,6 +1,6 @@
 import { useLoader } from "@react-three/fiber";
 import { ThreeCanvas } from "@remotion/three";
-import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { useCurrentFrame, useVideoConfig } from "remotion";
 import { TextureLoader } from "three";
 import { z } from "zod";
 
@@ -28,11 +28,9 @@ export const MyComposition: React.FC<z.infer<typeof myCompSchema>> = ({
       camera={{ fov: 75, position: [0, 0, 470] }}
     >
       <ambientLight intensity={0.15} />
-      <pointLight args={[undefined, 0.4]} position={[200, 200, 0]} />
       <mesh
-        position={[0, 0, 300]}
-        rotation={[frame * 0.06 * 0.5, frame * 0.07 * 0.5, frame * 0.08 * 0.5]}
-        scale={interpolate(Math.sin(frame / 10), [-1, 1], [0.8, 1.2])}
+        position={[0, 0, 350 - (frame - 60) * 0.36]}
+        rotation={[(frame - 30) * -0.06 * 0.04, (frame - 30) * -0.06 * 0.04, 0]}
       >
         <boxGeometry args={[100, 100, 100]} />
         <meshBasicMaterial attach="material" map={texture} />

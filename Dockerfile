@@ -1,5 +1,7 @@
 FROM node:18
 
+RUN apt-get install -y chromium
+
 # Create app directory
 WORKDIR /app
 

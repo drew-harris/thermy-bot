@@ -30,6 +30,11 @@ export const threedee = createCommand(
       console.log(`stdout: ${data}`);
     });
 
+    // Log the error of the shell
+    child?.stderr?.on("data", (data) => {
+      console.error(`stderr: ${data}`);
+    });
+
     // Wait for the shell to finish
     child?.on("close", (code) => {
       console.log(`child process exited with code ${code}`);

@@ -1,6 +1,6 @@
 import z from "zod";
-import { createCommand } from "../command/createCommand";
 import { createCommandGroup, createSubCommand } from "../command/commandGroup";
+import { createCommand } from "../command/createCommand";
 
 export const testCommand = createCommand(
   {

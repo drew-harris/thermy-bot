@@ -10,20 +10,34 @@
     "dev-windows": "nodemon src/index.ts",
     "db-push": "npx drizzle-kit push:mysql",
     "migrate": "drizzle-kit generate:mysql --schema src/db/schema.ts && ts-node src/db/migrate.ts",
-    "push-commands": "esrun src/command/pushScript.ts"
+    "push-commands": "esrun src/command/pushScript.ts",
+    "studio": "remotion studio"
   },
   "devDependencies": {
     "@digitak/esrun": "^3.2.24",
+    "@types/react": "^18.2.45",
     "drizzle-kit": "^0.19.13",
     "nodemon": "^3.0.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@react-three/fiber": "^8.15.12",
+    "@remotion/bundler": "^4.0.77",
+    "@remotion/cli": "^4.0.77",
+    "@remotion/motion-blur": "^4.0.77",
+    "@remotion/renderer": "^4.0.77",
+    "@remotion/three": "^4.0.77",
+    "@remotion/zod-types": "^4.0.77",
+    "@types/three": "^0.159.0",
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.28.6",
     "fastify": "^4.23.2",
     "mysql2": "^3.6.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.77",
+    "three": "^0.159.0",
     "zod": "^3.22.4"
   }
 }
